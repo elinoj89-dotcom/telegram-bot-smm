@@ -1,40 +1,41 @@
 from rich.console import Console
 from rich.panel import Panel
-from rich.text import Text
-from rich.progress import track
+from rich.table import Table
 import time
 
 console = Console()
 
-def run_script():
-    # En-tête du script
-    console.print(Panel("[bold cyan]INSTA-AUTO v2.0[/bold cyan]", expand=False))
+def afficher_header():
+    console.print(Panel.fit(
+        "[bold cyan]TELEGRAM SMM BOT v1.0[/bold cyan]\n[white]Automatisation & Scripts Termux[/white]",
+        border_style="magenta"
+    ))
 
-    # Simulation d'une boucle sur plusieurs utilisateurs
-    users = ["ninablicks", "sayudancestories", "izav_beauty"]
+def simulation_travail():
+    table = Table(title="Statut des Tâches")
+    table.add_column("Service", style="cyan")
+    table.add_column("Cible", style="white")
+    table.add_column("Statut", justify="right", style="green")
+
+    # Simulation d'actions
+    tasks = [
+        ("Instagram Like", "nina_blks", "SUCCÈS"),
+        ("Telegram Sub", "group_test", "EN COURS..."),
+        ("Twitter Follow", "lexx_vibe", "ÉCHEC")
+    ]
+
+    for service, cible, statut in tasks:
+        time.sleep(1)
+        table.add_row(service, cible, statut)
+        console.clear() # Rafraîchit l'écran
+        afficher_header()
+        console.print(table)
+        console.print(f"\n[yellow][⚡] Action sur {cible} effectuée...")
+
+if __name__ == "__main__":
+    afficher_header()
+    simulation_travail()
     
-    for i, user in enumerate(users, 1):
-        # Création du texte pour le bloc utilisateur
-        user_info = Text()
-        user_info.append(f"[{i:02}] Username: ", style="white")
-        user_info.append(f"{user} ", style="bold green")
-        user_info.append("[11]:[00]", style="bright_blue")
-        
-        # Affichage dans un panneau avec bordure fine
-        console.print(Panel(user_info, border_style="white"))
-        
-        if user == "sayudancestories":
-            console.print("[magenta][🔗] PostLink:[/magenta] https://www.instagram.com/p/DVX8MaqDrqb/")
-            console.print("[yellow][⚡] PostID:[/yellow] 3843805543031290523")
-            console.print("[bold green][✔] J'aime Succès[/bold green] [white][3189.2 + 1.1] CashCoins[/white]")
-        
-        time.sleep(0.5)
-
-    # Simulation du Bypass Captcha avec une barre de progression
-    console.print("\n[bold red][🤖] Security check detected![/bold red]")
-    for _ in track(range(10), description="[yellow]Bypassing Captcha..."):
-        time.sleep(0.2)
-        
     console.print("[bold green]✅ Captcha Bypassed Successfully![/bold green]")
 
 if __name__ == "__main__":
