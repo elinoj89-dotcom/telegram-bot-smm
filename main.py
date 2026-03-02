@@ -1,62 +1,68 @@
-import sys
-import time
+import telebot
 import json
-from datetime import datetime
+import os
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from rich.console import Console
-from rich.panel import Panel
 
+# --- CONFIGURATION ---
+import config
+bot = telebot.TeleBot(config.BOT_TOKEN)
 console = Console()
+DATA_FILE = "bots.json"
 
-# --- FONCTIONS DE GESTION ---
-def charger_cles():
+# --- FONCTIONS UTILITAIRES ---
+def load_data():
+    if not os.path.exists(DATA_FILE):
+        return {"keys": {}}
+    with open(DATA_FILE, 'r') as f:
+        return json.load(f)
+
+def save_data(data):
+    with open(DATA_FILE, 'w') as f:
+        json.dump(data, f, indent=4)
+
+# --- COMMANDES BOT ---
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "👋 Bienvenue ! Utilisez /auth <clé> pour vous connecter.")
+
+@bot.message_handler(commands=['auth'])
+def authenticate(message):
     try:
-        with open('bots.json', 'r') as f:
-            data = json.load(f)
-            return data.get("active_keys", [])
-    except FileNotFoundError:
-        console.print("[bold red]Erreur: Fichier bots.json introuvable ![/bold red]")
-        return []
-
-def enregistrer_utilisation(cle):
-    """Enregistre la clé utilisée et l'heure dans un fichier log.txt"""
-    horodatage = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    log_entry = f"[{horodatage}] Clé utilisée : {cle}\n"
-    
-    with open("log.txt", "a") as f:
-        f.write(log_entry)
-
-def verifier_cle():
-    console.clear()
-    console.print(Panel("[bold cyan]🔐 AUTHENTICATION REQUIRED[/bold cyan]", border_style="cyan"))
-    
-    # Charge les clés autorisées
-    cles_valides = charger_cles()
-    
-    # Demande la clé à l'utilisateur
-    cle_utilisateur = console.input("[bold yellow]Enter your License Key : [/bold yellow]")
-    
-    # Vérification
-    if cle_utilisateur in cles_valides:
-        console.print("[bold green]✔ License Verified ! Loading Dashboard...[/bold green]\n")
+        key = message.text.split()[1]
+        data = load_data()
         
-        # Enregistre l'utilisation de la clé
-        enregistrer_utilisation(cle_utilisateur)
+        if key in data["keys"] and data["keys"][key]["status"] == "active":
+            bot.reply_to(message, "✅ Clé valide ! Accès autorisé.")
+            # Ici, tu peux lancer les fonctionnalités du bot
+        else:
+            bot.reply_to(message, "❌ Clé invalide ou désactivée.")
+    except IndexError:
+        bot.reply_to(message, "⚠️ Usage: /auth <votre_clé>")
+
+# --- COMMANDES ADMIN ---
+@bot.message_handler(commands=['toggle'])
+def toggle_key(message):
+    if message.from_user.id != config.ADMIN_ID:
+        bot.reply_to(message, "🚫 Commande réservée à l'administrateur.")
+        return
+
+    try:
+        key = message.text.split()[1]
+        data = load_data()
         
-        time.sleep(1)
-        return True
-    else:
-        console.print("[bold red]✘ Invalid Key or Key Expired. Access Denied.[/bold red]")
-        time.sleep(2)
-        return False
+        if key in data["keys"]:
+            new_status = "inactive" if data["keys"][key]["status"] == "active" else "active"
+            data["keys"][key]["status"] = new_status
+            save_data(data)
+            bot.reply_to(message, f"🔄 Clé {key} est maintenant : {new_status}")
+        else:
+            bot.reply_to(message, "⚠️ Clé introuvable.")
+    except IndexError:
+        bot.reply_to(message, "⚠️ Usage: /toggle <clé>")
 
-def lancer_interface():
-    # Ici, ton interface stylée
-    console.clear()
-    console.print(Panel("[bold green]SMM Dashboard Active[/bold green]", border_style="green"))
-
+# --- LANCEMENT ---
 if __name__ == "__main__":
-    if verifier_cle():
-        lancer_interface()
-    else:
-        sys.exit()
-    
+    console.print("[bold green]🤖 Bot SMM Pro lancé ![/bold green]")
+    bot.infinity_polling()
+        
