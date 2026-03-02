@@ -1,8 +1,6 @@
 #!/bin/bash
-echo "🔄 Mise à jour Termux..."
-pkg update -y && pkg upgrade -y
-echo "📦 Installation Python et pip..."
+echo "Installation du projet SMM..."
+pkg update && pkg upgrade -y
 pkg install python -y
-echo "📦 Installation dépendances Python..."
 pip install -r requirements.txt
-echo "✅ Installation terminée"
+echo "Installation terminée. Tape 'python main.py' pour lancer."
