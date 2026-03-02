@@ -1,43 +1,50 @@
+import pyfiglet
 from rich.console import Console
 from rich.panel import Panel
-from rich.table import Table
+from rich.text import Text
 import time
 
 console = Console()
 
-def afficher_header():
-    console.print(Panel.fit(
-        "[bold cyan]TELEGRAM SMM BOT v1.0[/bold cyan]\n[white]Automatisation & Scripts Termux[/white]",
-        border_style="magenta"
-    ))
+def generer_interface():
+    # 1. Le gros logo SMM en ASCII Art
+    logo = pyfiglet.figlet_format("SMM", font="block")
+    console.print(f"[bold cyan]{logo}[/bold cyan]")
 
-def simulation_travail():
-    table = Table(title="Statut des Tâches")
-    table.add_column("Service", style="cyan")
-    table.add_column("Cible", style="white")
-    table.add_column("Statut", justify="right", style="green")
-
-    # Simulation d'actions
-    tasks = [
-        ("Instagram Like", "nina_blks", "SUCCÈS"),
-        ("Telegram Sub", "group_test", "EN COURS..."),
-        ("Twitter Follow", "lexx_vibe", "ÉCHEC")
-    ]
-
-    for service, cible, statut in tasks:
-        time.sleep(1)
-        table.add_row(service, cible, statut)
-        console.clear() # Rafraîchit l'écran
-        afficher_header()
-        console.print(table)
-        console.print(f"\n[yellow][⚡] Action sur {cible} effectuée...")
-
-if __name__ == "__main__":
-    afficher_header()
-    simulation_travail()
+    # 2. Le bloc d'infos (Tool Name, Developer, etc.)
+    infos = Text()
+    infos.append("[•] TOOL NAME   >> SMM\n", style="green")
+    infos.append("[•] DEVELOPPER  >> TON_NOM\n", style="green")
+    infos.append("[•] INTERFACE   >> Web Scraping\n", style="green")
+    infos.append("[•] VERSION     >> 1.0", style="green")
     
-    console.print("[bold green]✅ Captcha Bypassed Successfully![/bold green]")
+    console.print(Panel(infos, border_style="white"))
+
+    # 3. Le bandeau du compte
+    console.print(Panel("[bold yellow][✔] Votre compte:[/bold yellow] [white]Utilisateur Test[/white]", border_style="magenta"))
+
+    # 4. Simulation de la ligne de compteurs (J, H, M, S)
+    console.print("[bold magenta]⌛ [7] J [] H [11] M [] S ⌛[/bold magenta]")
+    print("-" * 40)
+
+    # 5. Simulation d'une action comme sur l'image
+    action = Text()
+    action.append("[04] Username: ", style="white")
+    action.append("reoudid01 ", style="bold green")
+    action.append("[06]:[54]\n", style="blue")
+    action.append("[🔗] UserLink: https://instagram.com/...\n", style="magenta")
+    action.append("[⚡] UserID: 47382438049\n", style="yellow")
+    action.append("[✔] Followers Succès [0 + 1.25] CashCoins", style="bold green")
+    
+    console.print(action)
+
+    # 6. Section Captcha
+    console.print("\n[bold magenta][🤖] Security check[/bold magenta]")
+    console.print("[bold white][💀] Emojie indice: √[/bold white]")
+    console.print("[bold green][✔] 3 images recuperer[/bold green]")
+    console.print("[bold green][✔] Answer: 19[/bold green]")
+    console.print("[yellow][...] Bypass Captcha[/yellow]")
 
 if __name__ == "__main__":
-    run_script()
-        
+    generer_interface()
+    
