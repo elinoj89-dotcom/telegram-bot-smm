@@ -1,9 +1,9 @@
 {
   "bot_name": "elino1000_bot",
   "version": "1.0",
-  "settings": {
-    "delay": 5,
-    "auto_captcha": true
-  },
-  "accounts": []
+  "active_keys": [
+    "KEY-ALPHA-123",
+    "KEY-BETA-456",
+    "KEY-PRO-789"
+  ]
 }
