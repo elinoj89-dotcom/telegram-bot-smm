@@ -1,12 +1,13 @@
 import sys
 import time
 import json
+from datetime import datetime
 from rich.console import Console
 from rich.panel import Panel
 
 console = Console()
 
-# --- CHARGEMENT DES CLÉS DEPUIS JSON ---
+# --- FONCTIONS DE GESTION ---
 def charger_cles():
     try:
         with open('bots.json', 'r') as f:
@@ -15,6 +16,14 @@ def charger_cles():
     except FileNotFoundError:
         console.print("[bold red]Erreur: Fichier bots.json introuvable ![/bold red]")
         return []
+
+def enregistrer_utilisation(cle):
+    """Enregistre la clé utilisée et l'heure dans un fichier log.txt"""
+    horodatage = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    log_entry = f"[{horodatage}] Clé utilisée : {cle}\n"
+    
+    with open("log.txt", "a") as f:
+        f.write(log_entry)
 
 def verifier_cle():
     console.clear()
@@ -29,6 +38,10 @@ def verifier_cle():
     # Vérification
     if cle_utilisateur in cles_valides:
         console.print("[bold green]✔ License Verified ! Loading Dashboard...[/bold green]\n")
+        
+        # Enregistre l'utilisation de la clé
+        enregistrer_utilisation(cle_utilisateur)
+        
         time.sleep(1)
         return True
     else:
