@@ -1,3 +1,7 @@
 rich
 requests
+rich
 pyfiglet
+pyTelegramBotAPI
+instagrapi
+
