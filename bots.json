@@ -1,3 +1,9 @@
-[
-   { "name": "elino1000_bot", "token": "AAH_N3tJuiWbERYHBWi1SgPSKkcPDk5_zQI" }
-]
+{
+  "bot_name": "elino1000_bot",
+  "version": "1.0",
+  "settings": {
+    "delay": 5,
+    "auto_captcha": true
+  },
+  "accounts": []
+}
