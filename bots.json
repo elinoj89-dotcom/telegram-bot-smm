@@ -1,8 +1,6 @@
 {
-  "bot_name": "elino1000_bot",
-  "version": "1.0",
-  "active_keys": [
-    "ProKKyWrlEehovVpdjTEPpKAZMOldKQGAJK",
-    "KEY-ALPHA-123"
-  ]
+  "keys": {
+    "CLE_UNIQUE_1": {"status": "active"},
+    "CLE_UNIQUE_2": {"status": "inactive"}
+  }
 }
