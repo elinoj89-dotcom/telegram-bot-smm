@@ -1,50 +1,55 @@
-import pyfiglet
+import time
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
-import time
+from rich.table import Table
+from rich.progress import track
 
+# Initialisation de la console pour l'affichage stylé
 console = Console()
 
-def generer_interface():
-    # 1. Le gros logo SMM en ASCII Art
-    logo = pyfiglet.figlet_format("SMM", font="block")
-    console.print(f"[bold cyan]{logo}[/bold cyan]")
-
-    # 2. Le bloc d'infos (Tool Name, Developer, etc.)
-    infos = Text()
-    infos.append("[•] TOOL NAME   >> SMM\n", style="green")
-    infos.append("[•] DEVELOPPER  >> TON_NOM\n", style="green")
-    infos.append("[•] INTERFACE   >> Web Scraping\n", style="green")
-    infos.append("[•] VERSION     >> 1.0", style="green")
+def afficher_interface_generique():
+    console.clear()
     
-    console.print(Panel(infos, border_style="white"))
+    # 1. En-tête du script
+    header = Text("BOT D'AUTOMATISATION SMM - MODÈLE", style="bold white on blue", justify="center")
+    console.print(Panel(header, border_style="blue"))
 
-    # 3. Le bandeau du compte
-    console.print(Panel("[bold yellow][✔] Votre compte:[/bold yellow] [white]Utilisateur Test[/white]", border_style="magenta"))
+    # 2. Section Informations du compte (Fictif)
+    console.print(Panel(
+        "[bold green][✔] Statut :[/bold green] [white]Connecté[/white]\n"
+        "[bold yellow][⚡] Crédits :[/bold yellow] [white]1000[/white]",
+        title="Infos Bot", border_style="yellow"
+    ))
 
-    # 4. Simulation de la ligne de compteurs (J, H, M, S)
-    console.print("[bold magenta]⌛ [7] J [] H [11] M [] S ⌛[/bold magenta]")
-    print("-" * 40)
+    # 3. Tableau de bord des actions (Données fictives)
+    table = Table(title="[bold]Journal d'activité[/bold]", border_style="cyan")
+    table.add_column("ID", style="dim", width=4)
+    table.add_column("Action", style="white")
+    table.add_column("Cible", style="white")
+    table.add_column("Statut", justify="right")
 
-    # 5. Simulation d'une action comme sur l'image
-    action = Text()
-    action.append("[04] Username: ", style="white")
-    action.append("reoudid01 ", style="bold green")
-    action.append("[06]:[54]\n", style="blue")
-    action.append("[🔗] UserLink: https://instagram.com/...\n", style="magenta")
-    action.append("[⚡] UserID: 47382438049\n", style="yellow")
-    action.append("[✔] Followers Succès [0 + 1.25] CashCoins", style="bold green")
+    # Simulation d'actions dans le tableau
+    actions = [
+        ("01", "Interaction", "Utilisateur_A", "[bold green]Succès[/bold green]"),
+        ("02", "Interaction", "Utilisateur_B", "[bold green]Succès[/bold green]"),
+        ("03", "Interaction", "Utilisateur_C", "[bold red]Échec[/bold red]"),
+    ]
+
+    for id, action, cible, statut in actions:
+        table.add_row(id, action, cible, statut)
+        
+    console.print(table)
+
+    # 4. Simulation de tâche en cours
+    console.print("\n[bold magenta][⌛] Vérification de sécurité en cours...[/bold magenta]")
     
-    console.print(action)
-
-    # 6. Section Captcha
-    console.print("\n[bold magenta][🤖] Security check[/bold magenta]")
-    console.print("[bold white][💀] Emojie indice: √[/bold white]")
-    console.print("[bold green][✔] 3 images recuperer[/bold green]")
-    console.print("[bold green][✔] Answer: 19[/bold green]")
-    console.print("[yellow][...] Bypass Captcha[/yellow]")
+    # Barre de progression fictive
+    for _ in track(range(5), description="[yellow]Analyse...[/yellow]"):
+        time.sleep(0.5)
+        
+    console.print("[bold green][✔] Vérification réussie ![/bold green]")
 
 if __name__ == "__main__":
-    generer_interface()
+    afficher_interface_generique()
     
